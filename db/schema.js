@@ -9,32 +9,38 @@ const itemSchema = new mongoose.Schema({
   // updatedAt: {type: Date, required: true, date: Date.now}
 })
 
-const purchaseSchema = new mongoose.Schema({
-  createdAt: {type: Date, required: true},
-  items: {type: Array,
-  ref: 'Item'}
-})
+// const purchaseSchema = new mongoose.Schema({
+//   createdAt: {type: Date, required: true},
+//   items: {type: Array,
+//   ref: 'Item'}
+// })
 
 const customerSchema = new mongoose.Schema({
   money: {type: Number, required: true},
-  purchases: [purchaseSchema]
+  purchases: [{
+    description: String,
+    purchasedAt: {type: Date, default: Date.now()
+  }}]
 })
 
 const machineSchema = new mongoose.Schema({
   items: {type: Array,
-    ref: 'Item'},
+    ref: 'itemSchema'},
     money: {type: Number, required: true, default: 500},
-    purchases: [purchaseSchema]
+    purchases: [{
+      description: String,
+      purchasedAt: {type: Date, default: Date.now()
+    }}]
   })
 
 const Item = mongoose.model('Item', itemSchema)
 const Customer = mongoose.model('Customer', customerSchema)
-const Purchase = mongoose.model('Purchase', purchaseSchema)
+// const Purchase = mongoose.model('Purchase', purchaseSchema)
 const Machine = mongoose.model('Machine', machineSchema)
 
 module.exports = {
   Item: Item,
   Customer: Customer,
-  Purchase: Purchase,
+  // Purchase: Purchase,
   Machine: Machine
 }

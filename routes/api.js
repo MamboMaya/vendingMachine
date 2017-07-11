@@ -36,30 +36,41 @@ router.get('/api/customer/items', function(req, res){
 })
 
 router.post('/api/customer/:_id/purchases', function(req, res){
+  Machine.findOne()
+  .then(function(Machine){
   Customer.findOne()
   .then(function(Customer){
-    console.log(Customer)
   Item.findOne({'_id': req.params._id})
   .then(function(selection){
-    console.log(selection)
     if (Customer.money >= selection.cost) {
       Customer.money = Customer.money - selection.cost //update customer money
-      Purchase.createdAt = Date.now()
+      // Purchase.createdAt = Date.now()
       selection.quantity = selection.quantity - 1 //update item quantity
-      // Purchase.items.push(selection) //add this purchase to purchased items array
+      Customer.update(
+        {$push: {'purchases': {description: selection.description}}}, function(err){
+          // console.log(err)
+        })
+        Machine.update(
+          {$push: {'purchases': {description: selection.description}}}, function(err){
+            // console.log(err)
+          })
+      // .then(function(){}) //add this purchase to purchased items array
       Machine.money += selection.cost //add money to total in machine
       Customer.save()
       selection.save()
       // Purchase.save()
+      console.log('After Purchase', Customer)
+      console.log('After Purchase', Machine)
       res.send('Thank you for your purchase!')
     } else {
       res.send('Sorry. You dont not have enough money for this item.')
     }
   })
   .catch(function(err){
-    console.log(err)
+    // console.log(err)
     res.send('Sorry, this item is no longer available. Please choose a different item.')
   })
+})
 })
 })
 
