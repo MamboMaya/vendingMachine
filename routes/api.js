@@ -5,7 +5,9 @@ const Customer = require('../db/schema').Customer
 const Purchase = require('../db/schema').Purchase
 const Machine = require('../db/schema').Machine
 
-
+router.get('/', function(req, res){
+  res.send('WELCOME TO THE VENDING MACHINE!!!')
+})
 router.post('/api/vendor/items', function(req, res){
   // let machine = new Machine()
   // machine.money = 500

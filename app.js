@@ -7,11 +7,15 @@ const Machine = require('./db/schema').Machine
 const Customer = require('./db/schema').Customer
 
 mongoose.Promise = require('bluebird')
-mongoose.connect('mongodb://localhost:27017/items')
+const mongoURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/items'
+mongoose.connect(mongoURL)
 app.use(bodyParser.urlencoded({extended: false}))
 
 app.use(apiRoutes)
 
-app.listen(3000, function(){
-  console.log('GOOD TO GO!!!!')
+
+const port = process.env.PORT || 3000
+
+app.listen(port, function(){
+  console.log('We are listening on port' + port)
 })
